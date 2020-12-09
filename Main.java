@@ -7,7 +7,7 @@ public class Main{
     FilaPrioridade fp = new FilaPrioridade();
     Scanner sc = new Scanner(System.in);
     int operations = sc.nextInt();
-    for(int i=0; i<operations; i++)
+    for(int i=0; i<=operations; i++)
     { 
       String op = sc.nextLine();
       String comp[] = op.split(" ");
@@ -31,7 +31,7 @@ public class Main{
             break;
         }
       }
-      else if(comp[0] == "3")
+      else if(comp[0].equals("3"))
       {
           int id = Integer.parseInt(comp[1]);
           double prior = Double.parseDouble(comp[2]);
@@ -83,9 +83,9 @@ class FilaPrioridade {
     if(this.m > 0)
     {
       Elemento maxm = A[0];
-      A[1] = A[this.m];
       this.m--;
-      maxHeapify(A, 1);
+      A[0] = A[this.m];
+      maxHeapify(A,0);
       return maxm;
     }
     else 
@@ -128,10 +128,10 @@ class FilaPrioridade {
   boolean HeapInsert(Elemento el)
   {
     boolean ok = false;
-    if (m < maxElementos)
+    if (this.m < maxElementos)
     {
-      increaseKey(A, m, el);
-      m++;
+      increaseKey(this.A, this.m, el);
+      this.m++;
       ok = true;     
     }
     return ok;
@@ -139,10 +139,11 @@ class FilaPrioridade {
 
   void HeapPrint()
   {
-    for(Elemento x : this.A)
+    for(int i = 0; i < m ; i++)
     {
-        System.out.println(x.getId()+" "+x.getPrior());
+      System.out.print(A[i].getId()+" "+A[i].getPrior()+" posicao("+ i + ") ");
     }
+    System.out.println();
   }
 
   /*METODOS AUXILIARES*/
@@ -163,21 +164,49 @@ class FilaPrioridade {
 
   //function to get the parent of a node of a tree
   public int getParent(Elemento A[], int index) {
-    if ((index > 1) && (index < A.length)) {
+    if ((index > 0) && (index < A.length)) {
       return index/2;
     }
     return -1;
   }
 
   public void increaseKey(Elemento A[], int index, Elemento el) {
+
     A[index] = el;
-    while((index>0) && (A[getParent(A, index)].getPrior() < A[index].getPrior())) {
+    siftUp(index);
+    /*while((index>0) && (A[getParent(A, index)].getPrior() < A[index].getPrior())) {
       Elemento temp;
       temp = A[getParent(A, index)];
       A[getParent(A, index)] = A[index];
       A[index] = temp;
       index = getParent(A, index);
     }
+    maxHeapify(A, index);*/
+  }
+
+  private void siftUp(int nodeIndex) {
+
+    int parentIndex;
+    Elemento tmp;
+
+    if (nodeIndex != 0) {
+
+          parentIndex = getParent(this.A, nodeIndex);
+
+          if (this.A[parentIndex].getPrior() < this.A[nodeIndex].getPrior()) {
+
+                tmp = this.A[parentIndex];
+
+                this.A[parentIndex] = this.A[nodeIndex];
+
+                this.A[nodeIndex] = tmp;
+
+                siftUp(parentIndex);
+
+          }
+
+    }
+
   }
 }
 
@@ -212,7 +241,7 @@ class Elemento {
   }
 
   public void printa() {
-    System.out.println(Integer.toString(this.id)+Double.toString(this.prior));
+    System.out.println(Integer.toString(this.id)+" "+Double.toString(this.prior));
   }
 
 }
