@@ -55,6 +55,7 @@ class FilaPrioridade {
   //Construtor setando os valores iniciais
   FilaPrioridade()
   {
+    //Tecnicamente a fila possui 4000 posições disponivei, já que a posição A[0] não será usada na implementação
     this.A = new Elemento[4001];
     this.maxElementos = 4001;
     this.m = 1;
@@ -68,8 +69,8 @@ class FilaPrioridade {
 
     //Caso não haja elementos na lista, retorna vazio
     //Senão, retorna o primeiro elemento
-    if (this.m <= 1) return vazio;
-    else if (this.m > 0) return (A[1]); 
+    if (this.m < 1) return vazio;
+    else if (this.m >= 1) return (A[1]); 
     else return vazio;
     
   }
